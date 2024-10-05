@@ -85,7 +85,7 @@ def run_translation():
     except RuntimeError as e:  # Handle runtime errors
         print(f"Runtime error occurred: {e}")
 
-    except Exception as e:  # Catch-all for any other errors
+    except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"An unexpected error occurred: {e}")
 
 # Entry point for running the translation function
