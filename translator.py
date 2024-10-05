@@ -2,7 +2,7 @@
 Module for translating sentences from English to Spanish using MarianMTModel.
 """
 
-import warnings  # Standard library import
+import warnings  # Standard library
 
 from transformers import MarianMTModel, MarianTokenizer  # Third-party imports
 import torch
@@ -78,12 +78,6 @@ def run_translation():
 
     except KeyboardInterrupt:
         print("\nTranslation process interrupted. Exiting gracefully...")
-
-    except ValueError as e:  # Handle specific error types
-        print(f"Value error occurred: {e}")
-
-    except RuntimeError as e:  # Handle runtime errors
-        print(f"Runtime error occurred: {e}")
 
     except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"An unexpected error occurred: {e}")
