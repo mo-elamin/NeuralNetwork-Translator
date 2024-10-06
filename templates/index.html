@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralNetwork Translator</title>
+    <style>
+        /* Ensure no horizontal scrolling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        label, select, input, textarea {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        textarea {
+            max-width: 100%; /* Prevent textarea overflow */
+            resize: vertical;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .translated-result {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #e7ffe7;
+            border: 1px solid #4CAF50;
+            word-wrap: break-word; /* Break long text to prevent overflow */
+        }
+    </style>
+    <script>
+        function translateText() {
+            const sourceLang = document.getElementById('source_lang').value;
+            const targetLang = document.getElementById('target_lang').value;
+            const sentence = document.getElementById('sentence').value;
+
+            // AJAX request to Flask
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/translate', true);
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    document.getElementById('translated-result').innerHTML = response.translated_sentence;
+
+                    // Clear input fields after translation
+                    document.getElementById('sentence').value = '';
+                } else if (xhr.readyState === 4) {
+                    alert('Error: Could not translate the text.');
+                }
+            };
+
+            xhr.send(JSON.stringify({
+                source_lang: sourceLang,
+                target_lang: targetLang,
+                sentence: sentence
+            }));
+        }
+    </script>
+</head>
+<body>
+    <h1>NeuralNetwork Translator</h1>
+
+    <form onsubmit="event.preventDefault(); translateText();">
+        <label for="source_lang">Source Language:</label>
+        <select id="source_lang" name="source_lang" required>
+            <option value="auto">Auto-detect</option>
+            <option value="en">English (en)</option>
+            <option value="es">Spanish (es)</option>
+            <option value="fr">French (fr)</option>
+            <option value="de">German (de)</option>
+        </select>
+
+        <label for="target_lang">Target Language:</label>
+        <select id="target_lang" name="target_lang" required>
+            <option value="es">Spanish (es)</option>
+            <option value="fr">French (fr)</option>
+            <option value="de">German (de)</option>
+            <option value="en">English (en)</option>
+        </select>
+
+        <label for="sentence">Enter a sentence:</label>
+        <textarea id="sentence" name="sentence" rows="4" cols="50" placeholder="Enter your sentence here" required></textarea>
+
+        <input type="submit" value="Translate">
+    </form>
+
+    <div id="translated-result" class="translated-result"></div>
+</body>
+</html>
