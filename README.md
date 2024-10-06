@@ -80,8 +80,3 @@ Key Sections Breakdown:
 6. Project Structure: Briefly explain the project’s directory and file structure.
 7. Future Enhancements: Mention any planned features (like asynchronous translation).
 8. License: State the project license, if applicable.
-
-Tips:
-- Keep the language clear and concise.
-- If you're planning to extend the project, you can mention "To Do" or "Future Enhancements" sections to give a roadmap.
-- Include badges (e.g., Python version, license) at the top if you like, as they are popular in open-source projects.
