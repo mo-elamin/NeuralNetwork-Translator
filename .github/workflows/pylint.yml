@@ -42,11 +42,13 @@ jobs:
     - name: Run Pylint
       run: pylint $(git ls-files '*.py')
 
-    # Optional: Save pylint report as an artifact (if needed)
-    - name: Archive pylint report
-      if: always()
+    # Step 6: Generate Pylint report
+    - name: Generate Pylint report
       run: pylint $(git ls-files '*.py') --output=pylint-report.txt
       continue-on-error: true
+
+    # Step 7: Upload Pylint report as an artifact
+    - name: Archive pylint report
       uses: actions/upload-artifact@v3
       with:
         name: pylint-report
