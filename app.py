@@ -1,3 +1,8 @@
+"""
+This module provides a web interface for real-time language translation
+using MarianMT models and Hugging Face Transformers.
+"""
+
 from flask import Flask, render_template, request, jsonify
 from transformers import MarianMTModel, MarianTokenizer
 import langid
@@ -15,6 +20,17 @@ models = {}
 tokenizers = {}
 
 def load_model_once(source_lang, target_lang):
+    """
+    Load the MarianMT model and tokenizer for the given language pair.
+    The model is cached after being loaded once.
+
+    Args:
+        source_lang (str): Source language code.
+        target_lang (str): Target language code.
+
+    Returns:
+        model, tokenizer: The MarianMT model and tokenizer for the specified language pair.
+    """
     key = (source_lang, target_lang)
     if key not in models:
         model_name = LANGUAGE_MODELS.get(key)
@@ -26,16 +42,39 @@ def load_model_once(source_lang, target_lang):
     return models[key], tokenizers[key]
 
 def detect_language(text):
+    """
+    Detect the language of a given text using the langid library.
+
+    Args:
+        text (str): The text whose language needs to be detected.
+
+    Returns:
+        str: Detected language code.
+    """
     lang, _ = langid.classify(text)
     return lang
 
 @app.route('/')
 def index():
+    """
+    Render the main page with the translation form.
+
+    Returns:
+        str: Rendered HTML page.
+    """
     return render_template('index.html')
 
 @app.route('/translate', methods=['POST'])
 def translate():
-    # Extract the JSON data from the POST request
+    """
+    Handle translation requests from the client and return the translated text as JSON.
+
+    The client sends a JSON object containing the source language, target language, and sentence
+    to be translated.
+
+    Returns:
+        dict: JSON response with the translated sentence.
+    """
     data = request.get_json()
     source_lang = data.get('source_lang')
     target_lang = data.get('target_lang')
@@ -49,7 +88,9 @@ def translate():
         # Load model and tokenizer once
         model, tokenizer = load_model_once(source_lang, target_lang)
         # Perform translation
-        translated_sentence = model.generate(**tokenizer(sentence, return_tensors="pt", padding=True))
+        translated_sentence = model.generate(
+            **tokenizer(sentence, return_tensors="pt", padding=True)
+        )
         translated_sentence = tokenizer.decode(translated_sentence[0], skip_special_tokens=True)
 
         # Return the translated sentence in a JSON response
@@ -60,12 +101,15 @@ def translate():
         response = {
             'translated_sentence': f"Error: {e}"
         }
+    except RuntimeError as e:  # Catch specific error types if possible
+        response = {
+            'translated_sentence': f"Runtime error occurred: {e}"
+        }
     except Exception as e:
         response = {
             'translated_sentence': f"An unexpected error occurred: {e}"
         }
 
-    # Return the response as JSON
     return jsonify(response)
 
 if __name__ == '__main__':
