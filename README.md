@@ -2,6 +2,8 @@ NeuralNetwork Translator
 
 ![Python](https://img.shields.io/badge/python-3.12%2B-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Build Status](https://github.com/mo-elamin/NeuralNetwork-Translator/actions/workflows/pylint.yml/badge.svg)
+
 
 Project Description
 The NeuralNetwork Translator is a web-based application that uses neural network models to translate text between different languages. It supports real-time translation with an intuitive frontend built with Flask. The backend leverages Hugging Face's MarianMT models for machine translation.
