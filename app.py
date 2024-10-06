@@ -91,7 +91,9 @@ def translate():
         translated_sentence = model.generate(
             **tokenizer(sentence, return_tensors="pt", padding=True)
         )
-        translated_sentence = tokenizer.decode(translated_sentence[0], skip_special_tokens=True)
+        translated_sentence = tokenizer.decode(
+            translated_sentence[0], skip_special_tokens=True
+        )
 
         # Return the translated sentence in a JSON response
         response = {
@@ -99,16 +101,16 @@ def translate():
         }
     except ValueError as e:
         response = {
-            'translated_sentence': f"Error: {e}"
-        }
-    except RuntimeError as e:  # Catch specific error types if possible
+            'translated_sentence': f"Error: {e}"}
+    except RuntimeError as e:
         response = {
-            'translated_sentence': f"Runtime error occurred: {e}"
-        }
-    except Exception as e:
+            'translated_sentence': f"Runtime error occurred: {e}"}
+    except KeyError as e:  # Handle specific KeyError
         response = {
-            'translated_sentence': f"An unexpected error occurred: {e}"
-        }
+            'translated_sentence': f"Key error occurred: {e}"}
+    except Exception as e:  # Fallback for unexpected errors, to prevent crashes
+        response = {
+            'translated_sentence': f"An unexpected error occurred: {e}"}
 
     return jsonify(response)
 
