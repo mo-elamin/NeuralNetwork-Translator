@@ -30,7 +30,8 @@ def load_model(source_lang, target_lang):
     model_name = LANGUAGE_MODELS.get((source_lang, target_lang))
 
     if not model_name:
-        raise ValueError(f"No model available for the language pair: {source_lang} -> {target_lang}")
+        raise ValueError(f"No model available for the language pair: "
+                         f"{source_lang} -> {target_lang}")
 
     tokenizer = MarianTokenizer.from_pretrained(model_name)
     model = MarianMTModel.from_pretrained(model_name)
@@ -52,7 +53,9 @@ def translate_pretrained(sentences, model, tokenizer):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
-    inputs = tokenizer(sentences, return_tensors="pt", padding=True, truncation=True).to(device)
+    inputs = tokenizer(
+        sentences, return_tensors="pt", padding=True, truncation=True
+    ).to(device)
     translated_tokens = model.generate(**inputs)
     return [tokenizer.decode(t, skip_special_tokens=True) for t in translated_tokens]
 
@@ -81,9 +84,11 @@ def run_translation():
     except KeyboardInterrupt:
         print("\nTranslation process interrupted. Exiting gracefully...")
     except ValueError as e:
-        print(f"Error: {e}")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"Value error occurred: {e}")
+    except RuntimeError as e:
+        print(f"Runtime error occurred: {e}")
+    except TypeError as e:
+        print(f"Type error occurred: {e}")
 
 # Entry point for running the translation function
 if __name__ == "__main__":
