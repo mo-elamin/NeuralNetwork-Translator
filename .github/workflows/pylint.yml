@@ -11,20 +11,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.12.3"]
 
     steps:
     # Step 1: Checkout the latest version of the repository
     - name: Check out the repository
       uses: actions/checkout@v4
 
-    # Step 2: Set up Python with the specific version
-    - name: Set up Python ${{ matrix.python-version }}
+    # Step 2: Set up Python 3.12.3
+    - name: Set up Python 3.12.3
       uses: actions/setup-python@v3
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.12.3
 
     # Step 3: Install dependencies from requirements.txt
     - name: Install dependencies from requirements.txt
