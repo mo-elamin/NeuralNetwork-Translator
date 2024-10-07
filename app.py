@@ -94,6 +94,7 @@ def translate():
         )
         translated_sentence = tokenizer.decode(
             translated_sentence[0], skip_special_tokens=True, clean_up_tokenization_spaces=True
+            # Explicitly set clean_up_tokenization_spaces
         )
 
         # Return the translated sentence in a JSON response
