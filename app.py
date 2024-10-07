@@ -93,7 +93,7 @@ def translate():
             **tokenizer(sentence, return_tensors="pt", padding=True)
         )
         translated_sentence = tokenizer.decode(
-            translated_sentence[0], skip_special_tokens=True
+            translated_sentence[0], skip_special_tokens=True, clean_up_tokenization_spaces=True
         )
 
         # Return the translated sentence in a JSON response
