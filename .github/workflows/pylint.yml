@@ -32,8 +32,7 @@ jobs:
     # Step 4: Install Pylint and additional dependencies needed for the project
     - name: Install Pylint and additional dependencies
       run: |
-        pip install pylint
-        pip install flask langid
+        pip install pylint flask langid torch transformers
 
     # Step 5: Run Pylint against Python files in the repository
     - name: Run Pylint
