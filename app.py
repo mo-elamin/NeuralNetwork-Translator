@@ -38,7 +38,8 @@ def load_model_once(source_lang, target_lang):
             models[key] = MarianMTModel.from_pretrained(model_name)
             tokenizers[key] = MarianTokenizer.from_pretrained(model_name)
         else:
-            raise ValueError(f"No model available for language pair: {source_lang} to {target_lang}")
+            raise ValueError(f"No model available for language pair: "
+                             f"{source_lang} to {target_lang}")
     return models[key], tokenizers[key]
 
 def detect_language(text):
@@ -100,17 +101,13 @@ def translate():
             'translated_sentence': translated_sentence
         }
     except ValueError as e:
-        response = {
-            'translated_sentence': f"Error: {e}"}
+        response = {'translated_sentence': f"Error: {e}"}
     except RuntimeError as e:
-        response = {
-            'translated_sentence': f"Runtime error occurred: {e}"}
-    except KeyError as e:  # Handle specific KeyError
-        response = {
-            'translated_sentence': f"Key error occurred: {e}"}
-    except Exception as e:  # Fallback for unexpected errors, to prevent crashes
-        response = {
-            'translated_sentence': f"An unexpected error occurred: {e}"}
+        response = {'translated_sentence': f"Runtime error occurred: {e}"}
+    except KeyError as e:
+        response = {'translated_sentence': f"Key error occurred: {e}"}
+    except TypeError as e:
+        response = {'translated_sentence': f"Type error occurred: {e}"}
 
     return jsonify(response)
 
